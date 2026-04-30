@@ -23,15 +23,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         lifecycleScope.launch {
-            val retrofit = Retrofit.Builder()
-                .baseUrl("https://thesimpsonsapi.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-            val api = retrofit.create(SimpsonsApi::class.java)
-
-            val homer = api.getCharacter(1)
-            Log.d("SIMPSONS", homer.name)
-            Log.d("SIMPSONS", homer.status)
+            val personagem = ApiFactory.api.getCharacter((1..100).random())
+            Log.d("SIMPSONS", personagem.name)
+            Log.d("SIMPSONS", personagem.status)
         }
 
 

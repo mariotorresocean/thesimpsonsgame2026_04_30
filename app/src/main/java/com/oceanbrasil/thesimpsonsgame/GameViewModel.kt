@@ -12,7 +12,8 @@ import kotlinx.coroutines.launch
 
 data class GameState(
     val loading: Boolean = true,
-    val character: CharacterDto?= null
+    val character: CharacterDto?= null,
+    val score: Int = 0
 )
 
 class GameViewModel : ViewModel() {
@@ -24,7 +25,29 @@ class GameViewModel : ViewModel() {
     init {
         viewModelScope.launch {
             val personagem = ApiFactory.api.getCharacter((1..100).random())
-            _uiState.value = GameState(loading=false, personagem)
+            _uiState.value = GameState(loading=false, personagem, 0)
         }
+    }
+
+    fun resposta(resp:Boolean) {
+
+        if (resp) { // jogador acha que está vivo
+            if (uiState.value.character?.status == "Alive") {
+                //Acertou
+                // score + 1
+            } else {
+                //Errou
+                // score -1
+            }
+        } else { //jogador acha que está morto
+            if (uiState.value.character?.status == "Alive") {
+                //Errou
+                // score -1
+            } else {
+                //Acertou
+                // score + 1
+            }
+        }
+
     }
 }

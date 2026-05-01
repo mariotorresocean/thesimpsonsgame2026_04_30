@@ -57,6 +57,7 @@ fun GameScreen(vm: GameViewModel = viewModel()) {
     } else {
         Column(Modifier.fillMaxSize().padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally) {
+            Text("Score: ${state.score}")
             AsyncImage(
                 model = "https://cdn.thesimpsonsapi.com/500${state.character?.portrait_path}",
                 contentDescription = null,

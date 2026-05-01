@@ -23,9 +23,13 @@ class GameViewModel : ViewModel() {
     val uiState: StateFlow<GameState> = _uiState.asStateFlow()
 
     init {
+        loadNext()
+    }
+
+    fun loadNext() {
         viewModelScope.launch {
             val personagem = ApiFactory.api.getCharacter((1..100).random())
-            _uiState.value = GameState(loading=false, personagem, 0)
+            _uiState.value = GameState(loading=false, personagem, uiState.value.score)
         }
     }
 
@@ -35,19 +39,25 @@ class GameViewModel : ViewModel() {
             if (uiState.value.character?.status == "Alive") {
                 //Acertou
                 // score + 1
+                _uiState.value = _uiState.value.copy(score = uiState.value.score  + 1 )
             } else {
                 //Errou
                 // score -1
+                _uiState.value = _uiState.value.copy(score = uiState.value.score  -1 )
             }
         } else { //jogador acha que está morto
             if (uiState.value.character?.status == "Alive") {
                 //Errou
                 // score -1
+                _uiState.value = _uiState.value.copy(score = uiState.value.score  - 1 )
             } else {
                 //Acertou
                 // score + 1
+                _uiState.value = _uiState.value.copy(score = uiState.value.score  + 1 )
             }
         }
+
+        loadNext()
 
     }
 }

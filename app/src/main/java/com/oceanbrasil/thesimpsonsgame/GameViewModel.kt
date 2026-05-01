@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 
 
 data class GameState(
-//    val loading: Boolean = true,
+    val loading: Boolean = true,
     val character: CharacterDto?= null
 )
 
@@ -24,7 +24,7 @@ class GameViewModel : ViewModel() {
     init {
         viewModelScope.launch {
             val personagem = ApiFactory.api.getCharacter((1..100).random())
-            _uiState.value = GameState(personagem)
+            _uiState.value = GameState(loading=false, personagem)
         }
     }
 }

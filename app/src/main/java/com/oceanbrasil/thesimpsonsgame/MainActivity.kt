@@ -5,18 +5,24 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
 import com.oceanbrasil.thesimpsonsgame.ui.theme.TheSimpsonsGameTheme
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
@@ -42,6 +48,24 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun GameScreen(vm: GameViewModel = viewModel()) {
     val state by vm.uiState.collectAsState()
-    Text(state.character?.name ?: "Não carregado",
-        modifier = Modifier.padding(30.dp))
+    if (state.loading || state.character == null) {
+        CircularProgressIndicator()
+        //Text("Carregando...",modifier = Modifier.padding(30.dp))
+    } else {
+        Column(Modifier.fillMaxSize().padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally) {
+            AsyncImage(
+                model = "https://cdn.thesimpsonsapi.com/500${state.character?.portrait_path}",
+                contentDescription = null,
+                modifier = Modifier.height(300.dp)
+            )
+            Text(state.character?.portrait_path ?: "Não carregado",
+                modifier = Modifier.padding(30.dp))
+            Text(state.character?.name ?: "Não carregado",
+                modifier = Modifier.padding(30.dp))
+            Text(state.character?.status ?: "Não carregado",
+                modifier = Modifier.padding(30.dp))
+
+        }
+    }
 }

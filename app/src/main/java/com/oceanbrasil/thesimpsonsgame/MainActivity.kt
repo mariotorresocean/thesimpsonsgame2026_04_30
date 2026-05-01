@@ -10,9 +10,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.oceanbrasil.thesimpsonsgame.ui.theme.TheSimpsonsGameTheme
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
@@ -22,40 +26,22 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        lifecycleScope.launch {
-            val personagem = ApiFactory.api.getCharacter((1..100).random())
-            Log.d("SIMPSONS", personagem.name)
-            Log.d("SIMPSONS", personagem.status)
-        }
+
 
 
 
         enableEdgeToEdge()
         setContent {
             TheSimpsonsGameTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                GameScreen()
             }
         }
     }
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    TheSimpsonsGameTheme {
-        Greeting("Android")
-    }
+fun GameScreen(vm: GameViewModel = viewModel()) {
+    val state by vm.uiState.collectAsState()
+    Text(state.character?.name ?: "Não carregado",
+        modifier = Modifier.padding(30.dp))
 }

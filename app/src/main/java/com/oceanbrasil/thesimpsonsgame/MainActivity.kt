@@ -59,7 +59,7 @@ fun GameScreen(vm: GameViewModel = viewModel()) {
             horizontalAlignment = Alignment.CenterHorizontally) {
             Text("Score: ${state.score}")
             AsyncImage(
-                model = "https://cdn.thesimpsonsapi.com/500${state.character?.portrait_path}",
+                model = state.character?.image,
                 contentDescription = null,
                 modifier = Modifier.height(300.dp)
             )

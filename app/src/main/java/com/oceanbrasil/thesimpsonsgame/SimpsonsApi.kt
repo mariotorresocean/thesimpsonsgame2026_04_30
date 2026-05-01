@@ -4,7 +4,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 
 interface SimpsonsApi {
-    @GET("api/characters/{id}")
+    @GET("api/character/{id}")
     suspend fun getCharacter(@Path("id") id: Int): CharacterDto
 }
 
@@ -13,5 +13,5 @@ data class CharacterDto(
     val id: Int,
     val name: String,
     val status: String,
-    val portrait_path: String
+    val image: String
 )

@@ -53,7 +53,7 @@ fun GameScreen(vm: GameViewModel = viewModel()) {
     val state by vm.uiState.collectAsState()
     if (state.loading || state.character == null) {
         CircularProgressIndicator()
-        //Text("Carregando...",modifier = Modifier.padding(30.dp))
+        //Text("Carregando!",modifier = Modifier.padding(30.dp))
     } else {
         Column(Modifier.fillMaxSize().padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally) {

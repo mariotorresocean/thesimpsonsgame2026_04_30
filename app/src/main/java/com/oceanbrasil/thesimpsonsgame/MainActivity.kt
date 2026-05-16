@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -111,13 +112,20 @@ fun CardPersonagem(personagem: CharacterDto) {
                 Text(personagem.name, fontSize = 24.sp)
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Box(Modifier.size(10.dp).clip(CircleShape).background(getCorStatus(personagem.status)))
-                    Text(personagem.status, fontSize = 12.sp)
+                    Text(getStatusBR(personagem.status), fontSize = 12.sp)
+                    Spacer(Modifier.padding(8.dp))
+                    Text(personagem.species, fontSize = 12.sp)
                 }
             }
         }
     }
 }
 
+private fun getStatusBR(status: String): String = when (status) {
+    "Alive" -> "Vivo"
+    "Dead" -> "Morto"
+    else -> "Desconhecido"
+}
 private fun getCorStatus(status: String): Color = when (status) {
     "Alive" -> Color.Green
     "Dead" -> Color.Red

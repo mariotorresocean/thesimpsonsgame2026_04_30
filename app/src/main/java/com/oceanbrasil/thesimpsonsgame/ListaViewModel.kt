@@ -25,6 +25,9 @@ class ListaViewModel : ViewModel() {
 
     fun carregarPersonagens() {
         val atual = _uiState.value
+        if (atual.loading && atual.personagens.isNotEmpty()) return
+        if (atual.totalPaginas > 0 && atual.paginaAtual >= atual.totalPaginas) return
+
         //if (atual.personagens.isNotEmpty())
 
         viewModelScope.launch {

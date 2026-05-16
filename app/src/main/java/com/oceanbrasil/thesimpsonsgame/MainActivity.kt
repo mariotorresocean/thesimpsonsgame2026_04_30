@@ -74,11 +74,9 @@ fun ListaScreen(vm: ListaViewModel = viewModel()) {
             total > 0 && ultimoVisivel >= total -4
         }
     }
-
     LaunchedEffect(precisaCarregarMais) {
         if (precisaCarregarMais) vm.carregarPersonagens()
     }
-
 
     if (state.loading) {
         CircularProgressIndicator()

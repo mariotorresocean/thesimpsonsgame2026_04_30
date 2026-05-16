@@ -12,6 +12,6 @@ interface PersonagemDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun inserirTodos(personagens: List<PersonagemEntity>)
 
-    @Query("SELECT * FROM personagens ORDER BY id ASC")
+    @Query("SELECT * FROM personagens ORDER BY name ASC")
     fun observarTodos(): Flow<List<PersonagemEntity>>
 }

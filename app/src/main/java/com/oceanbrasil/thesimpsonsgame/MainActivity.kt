@@ -67,6 +67,7 @@ class MainActivity : ComponentActivity() {
 fun ListaScreen(vm: ListaViewModel = viewModel()) {
     val state by vm.uiState.collectAsState()
     val gridState = rememberLazyGridState()
+    val personagens by vm.personagens.collectAsState()
 
     val precisaCarregarMais by remember {
         derivedStateOf {
@@ -88,7 +89,7 @@ fun ListaScreen(vm: ListaViewModel = viewModel()) {
             state = gridState,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-            items(state.personagens) { p ->
+            items(personagens) { p ->
                 CardPersonagem(p)
             }
         }
@@ -96,7 +97,7 @@ fun ListaScreen(vm: ListaViewModel = viewModel()) {
 }
 
 @Composable
-fun CardPersonagem(personagem: CharacterDto) {
+fun CardPersonagem(personagem: PersonagemEntity) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)

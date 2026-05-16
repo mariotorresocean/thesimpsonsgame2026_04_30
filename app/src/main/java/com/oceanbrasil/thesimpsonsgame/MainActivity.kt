@@ -11,6 +11,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
@@ -34,17 +37,42 @@ import retrofit2.converter.gson.GsonConverterFactory
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
-
-
-
         enableEdgeToEdge()
         setContent {
             TheSimpsonsGameTheme {
-                GameScreen()
+                //GameScreen()
+                ListaScreen()
             }
         }
+    }
+}
+
+@Composable
+fun ListaScreen(vm: ListaViewModel = viewModel()) {
+    val state by vm.uiState.collectAsState()
+    if (state.loading) {
+        CircularProgressIndicator()
+    } else {
+
+        LazyVerticalGrid(columns = GridCells.Fixed(3)) {
+            items(state.personagens) { p ->
+                CardPersonagem(p)
+            }
+        }
+    }
+}
+
+@Composable
+fun CardPersonagem(personagem: CharacterDto) {
+    Column() {
+        AsyncImage(
+            model = personagem.image,
+            contentDescription = null,
+            modifier = Modifier.height(300.dp)
+        )
+        Text(personagem.name,
+            fontSize = 32.sp,
+            modifier = Modifier.padding(30.dp))
     }
 }
 

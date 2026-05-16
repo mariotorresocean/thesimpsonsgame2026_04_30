@@ -10,7 +10,9 @@ import kotlinx.coroutines.launch
 
 data class ListaState (
     val loading: Boolean = true,
-    val personagens: List<CharacterDto> = emptyList()
+    val personagens: List<CharacterDto> = emptyList(),
+    val paginaAtual: Int = 0,
+    val totalPaginas: Int = 0
 )
 
 class ListaViewModel : ViewModel() {
@@ -22,10 +24,19 @@ class ListaViewModel : ViewModel() {
     }
 
     fun carregarPersonagens() {
+        val atual = _uiState.value
+        //if (atual.personagens.isNotEmpty())
+
         viewModelScope.launch {
-            val response = ApiFactory.api.getCharacters(1)
-            _uiState.value = ListaState(loading=false,
-                personagens = response.results)
+            val proximaPagina = atual.paginaAtual + 1
+            val response = ApiFactory.api.getCharacters(proximaPagina)
+
+            _uiState.value = _uiState.value.copy(
+                loading = false,
+                personagens = _uiState.value.personagens + response.results,
+                paginaAtual = proximaPagina,
+                totalPaginas = response.info.pages
+            )
             Log.d("RICKANDMORTY", response.results[0].name)
         }
     }

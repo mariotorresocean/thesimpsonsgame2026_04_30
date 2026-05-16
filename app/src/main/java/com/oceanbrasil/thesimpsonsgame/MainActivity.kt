@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -28,8 +29,11 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -61,13 +65,28 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun ListaScreen(vm: ListaViewModel = viewModel()) {
     val state by vm.uiState.collectAsState()
+    val gridState = rememberLazyGridState()
+
+    val precisaCarregarMais by remember {
+        derivedStateOf {
+            val ultimoVisivel = gridState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
+            val total = gridState.layoutInfo.totalItemsCount
+            total > 0 && ultimoVisivel >= total -4
+        }
+    }
+
+    LaunchedEffect(precisaCarregarMais) {
+        if (precisaCarregarMais) vm.carregarPersonagens()
+    }
+
+
     if (state.loading) {
         CircularProgressIndicator()
     } else {
-
         LazyVerticalGrid(columns = GridCells.Fixed(3),
             modifier = Modifier.fillMaxSize().padding(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
+            state = gridState,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
             items(state.personagens) { p ->

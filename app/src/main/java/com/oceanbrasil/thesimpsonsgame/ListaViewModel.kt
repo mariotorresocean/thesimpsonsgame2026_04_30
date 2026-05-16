@@ -1,6 +1,8 @@
 package com.oceanbrasil.thesimpsonsgame
 
+import android.app.Application
 import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,9 +18,10 @@ data class ListaState (
     val erro: String? = null
 )
 
-class ListaViewModel : ViewModel() {
+class ListaViewModel(application: Application) : AndroidViewModel(application) {
     private val _uiState = MutableStateFlow(ListaState())
     val uiState: StateFlow<ListaState> = _uiState.asStateFlow()
+    private val dao = DatabaseFactory.get(application).personagemDao()
 
     init {
         carregarPersonagens()
@@ -41,7 +44,10 @@ class ListaViewModel : ViewModel() {
                     paginaAtual = proximaPagina,
                     totalPaginas = response.info.pages
                 )
+
                 Log.d("RICKANDMORTY", response.results[0].name)
+                //dao.inserirTodos(response.results)
+                dao.inserirTodos(response.results.map { it.toEntity() })
             } catch (e:Exception) {
                 _uiState.value = _uiState.value.copy(
                     loading = false,
@@ -50,4 +56,7 @@ class ListaViewModel : ViewModel() {
             }
         }
     }
+    private fun CharacterDto.toEntity() = PersonagemEntity(
+        id = id, name = name, species = species, status = status, image = image
+    )
 }

@@ -69,7 +69,7 @@ dependencies {
 
     // If this project uses any Kotlin source, use Kotlin Symbol Processing (KSP)
     // See Add the KSP plugin to your project
-    //ksp("androidx.room:room-compiler:$room_version")
+    ksp("androidx.room:room-compiler:$room_version")
 
     // If this project only uses Java source, use the Java annotationProcessor
     // No additional plugins are necessary

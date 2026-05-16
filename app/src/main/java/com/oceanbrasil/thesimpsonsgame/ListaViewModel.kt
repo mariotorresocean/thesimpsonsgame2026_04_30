@@ -12,7 +12,8 @@ data class ListaState (
     val loading: Boolean = true,
     val personagens: List<CharacterDto> = emptyList(),
     val paginaAtual: Int = 0,
-    val totalPaginas: Int = 0
+    val totalPaginas: Int = 0,
+    val erro: String? = null
 )
 
 class ListaViewModel : ViewModel() {
@@ -31,16 +32,22 @@ class ListaViewModel : ViewModel() {
         //if (atual.personagens.isNotEmpty())
 
         viewModelScope.launch {
-            val proximaPagina = atual.paginaAtual + 1
-            val response = ApiFactory.api.getCharacters(proximaPagina)
-
-            _uiState.value = _uiState.value.copy(
-                loading = false,
-                personagens = _uiState.value.personagens + response.results,
-                paginaAtual = proximaPagina,
-                totalPaginas = response.info.pages
-            )
-            Log.d("RICKANDMORTY", response.results[0].name)
+            try {
+                val proximaPagina = atual.paginaAtual + 1
+                val response = ApiFactory.api.getCharacters(proximaPagina)
+                _uiState.value = _uiState.value.copy(
+                    loading = false,
+                    personagens = _uiState.value.personagens + response.results,
+                    paginaAtual = proximaPagina,
+                    totalPaginas = response.info.pages
+                )
+                Log.d("RICKANDMORTY", response.results[0].name)
+            } catch (e:Exception) {
+                _uiState.value = _uiState.value.copy(
+                    loading = false,
+                    erro = "Erro ao carregar: ${e.message}"
+                )
+            }
         }
     }
 }

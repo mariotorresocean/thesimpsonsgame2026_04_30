@@ -10,8 +10,9 @@ object DatabaseFactory {
             databaseBuilder(
                 context.applicationContext,
                 AppDatabase::class.java,
-                "rickandmorty.db"
-            ).build().also { instance = it }
+                "thesimpsonsgame.db"
+            ).fallbackToDestructiveMigration()
+                .build().also { instance = it }
         }
     }
 }

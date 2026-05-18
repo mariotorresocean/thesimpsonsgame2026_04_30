@@ -28,7 +28,7 @@ class GameViewModel : ViewModel() {
 
     fun loadNext() {
         viewModelScope.launch {
-            val personagem = ApiFactory.api.getCharacter((1..100).random())
+            val personagem = ApiFactory.rickAndMortyApi.getCharacter((1..100).random())
             _uiState.value = GameState(loading=false, personagem, uiState.value.score)
         }
     }

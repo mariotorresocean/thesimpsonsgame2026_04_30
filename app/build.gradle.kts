@@ -6,11 +6,7 @@ plugins {
 
 android {
     namespace = "com.oceanbrasil.thesimpsonsgame"
-    compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
-    }
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.oceanbrasil.thesimpsonsgame"
@@ -62,6 +58,8 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.coil.compose)
+    implementation("androidx.compose.material:material-icons-core")
+    implementation("androidx.compose.material:material-icons-extended")
 
     val room_version = "2.8.4"
 

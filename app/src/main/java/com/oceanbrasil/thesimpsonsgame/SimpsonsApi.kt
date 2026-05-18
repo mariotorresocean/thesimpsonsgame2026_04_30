@@ -7,8 +7,12 @@ import retrofit2.http.Query
 interface SimpsonsApi {
     @GET("api/character/{id}")
     suspend fun getCharacter(@Path("id") id: Int): CharacterDto
+    
     @GET("api/character")
     suspend fun getCharacters(@Query("page") page: Int): CharactersResponse
+
+    @GET("characters")
+    suspend fun getSimpsonsCharacters(): List<SimpsonsCharacterDto>
 }
 
 data class CharactersResponse(
@@ -24,10 +28,17 @@ data class PageInfo(
 )
 
 data class CharacterDto(
-    // id, name, status, portrait_path
     val id: Int,
     val name: String,
     val status: String,
     val image: String,
     val species: String
+)
+
+data class SimpsonsCharacterDto(
+    val id: Int,
+    val name: String,
+    val status: String?,
+    val image: String,
+    val gender: String?
 )
